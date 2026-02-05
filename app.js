@@ -19,10 +19,10 @@
       localStorage.setItem(this.CONTACTS_KEY, JSON.stringify(contacts));
     },
 
-    addContact(name, phone) {
+    addContact(name, phone, email = '', address = '', notes = '') {
       const contacts = this.getContacts();
       const id = Date.now().toString();
-      contacts.push({ id, name, phone, createdAt: new Date().toISOString() });
+      contacts.push({ id, name, phone, email, address, notes, createdAt: new Date().toISOString() });
       this.saveContacts(contacts);
       return { id, name, phone };
     },
@@ -235,7 +235,9 @@
             <div class="call-avatar contact-avatar">${contact.name.charAt(0).toUpperCase()}</div>
             <div class="call-info contact-info">
               <div class="call-name contact-name">${contact.name} ${callCount > 0 ? `<span class="badge-count">(${callCount})</span>` : ''}</div>
-              <div class="call-meta contact-phone">${contact.phone}</div>
+              <div class="call-meta contact-phone">📞 ${contact.phone}</div>
+              ${contact.email ? `<div class="call-meta contact-email">✉️ ${contact.email}</div>` : ''}
+              ${contact.address ? `<div class="call-meta contact-address">📍 ${contact.address}</div>` : ''}
               ${lastCall ? `<div class="call-meta">${UI.getCallTypeIcon(lastCall.type)} ${UI.formatCallTime(lastCall.timestamp)}</div>` : ''}
             </div>
             <div class="contact-actions">
@@ -418,8 +420,11 @@
         e.preventDefault();
         const name = $('#contact-name').val().trim();
         const phone = $('#contact-phone').val().trim();
+        const email = $('#contact-email').val().trim();
+        const address = $('#contact-address').val().trim();
+        const notes = $('#contact-notes').val().trim();
         if (name && phone) {
-          Storage.addContact(name, phone);
+          Storage.addContact(name, phone, email, address, notes);
           this.closeContactModal();
           UI.renderContacts();
         }
