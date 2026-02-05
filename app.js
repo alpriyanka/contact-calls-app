@@ -321,7 +321,8 @@
         }
       });
 
-      $('.contact-card .call-btn').on('click', function (e) {
+      // Call button on contact card
+      $(document).on('click', '.contact-card .call-btn', function (e) {
         e.stopPropagation();
         const contactId = $(this).closest('.contact-card').data('contact-id');
         const contacts = Storage.getContacts();
@@ -331,7 +332,8 @@
         }
       });
 
-      $('.delete-contact-btn').on('click', function (e) {
+      // Delete button with event delegation (for dynamically created elements)
+      $(document).on('click', '.delete-contact-btn', function (e) {
         e.stopPropagation();
         const contactId = $(this).data('contact-id');
         const contacts = Storage.getContacts();
@@ -669,6 +671,7 @@
     },
 
     openKeypad() {
+      $('.main-content').addClass('hidden');
       $('#keypad-screen').removeClass('hidden');
       $('.nav-item').removeClass('active');
       $('[href="#keypad"]').addClass('active');
@@ -677,6 +680,7 @@
 
     closeKeypad() {
       $('#keypad-screen').addClass('hidden');
+      $('.main-content').removeClass('hidden');
       $('.nav-item').removeClass('active');
       $('[href="#"]').first().addClass('active');
       $('#keypad-input').val('');

@@ -202,7 +202,14 @@ body {
   overflow-y: auto;
   padding: 8px 16px 80px;
   -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
 }
+
+.main-content.hidden {
+  display: none;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
