@@ -236,7 +236,10 @@
               <div class="call-meta contact-phone">${contact.phone}</div>
               ${lastCall ? `<div class="call-meta">${UI.getCallTypeIcon(lastCall.type)} ${UI.formatCallTime(lastCall.timestamp)}</div>` : ''}
             </div>
-            <button type="button" class="call-btn" aria-label="Call">📞</button>
+            <div class="contact-actions">
+              <button type="button" class="call-btn" aria-label="Call">📞</button>
+              <button type="button" class="delete-contact-btn" data-contact-id="${contact.id}" aria-label="Delete">🗑️</button>
+            </div>
           </li>
         `;
       }).join('');
@@ -302,7 +305,10 @@
     },
 
     bindContactEvents() {
-      $('.contact-card').on('click', function () {
+      $('.contact-card').on('click', function (e) {
+        if ($(e.target).hasClass('delete-contact-btn') || $(e.target).hasClass('call-btn')) {
+          return;
+        }
         const contactId = $(this).data('contact-id');
         const contacts = Storage.getContacts();
         const contact = contacts.find(c => c.id === contactId);
@@ -318,6 +324,17 @@
         const contact = contacts.find(c => c.id === contactId);
         if (contact) {
           App.makeCall(contact);
+        }
+      });
+
+      $('.delete-contact-btn').on('click', function (e) {
+        e.stopPropagation();
+        const contactId = $(this).data('contact-id');
+        const contacts = Storage.getContacts();
+        const contact = contacts.find(c => c.id === contactId);
+        if (contact && confirm(`Delete contact "${contact.name}"?`)) {
+          Storage.deleteContact(contactId);
+          UI.renderContacts();
         }
       });
     },
@@ -356,6 +373,24 @@
         $(this).text($('#device-frame').hasClass('fullscreen') ? 'Exit fullscreen' : 'Fullscreen frame');
       });
 
+      // Hamburger Menu
+      $('.menu-btn').on('click', () => this.openSidebar());
+      $('.close-sidebar-btn, #sidebar-overlay').on('click', () => this.closeSidebar());
+
+      // Sidebar menu items
+      $('.sidebar-item').on('click', function () {
+        const menu = $(this).data('menu');
+        App.closeSidebar();
+        App.handleMenuClick(menu);
+      });
+
+      // Voice Demo Button
+      $('.voice-demo-btn').on('click', () => this.openVoiceDemo());
+      $('#voice-demo-modal .close-btn').on('click', () => this.closeVoiceDemo());
+      $('#voice-demo-modal').on('click', (e) => {
+        if (e.target.id === 'voice-demo-modal') this.closeVoiceDemo();
+      });
+
       // Tabs
       $('.tab').on('click', function () {
         const tab = $(this).data('tab');
@@ -373,8 +408,8 @@
         });
       });
 
-      // Add contact buttons
-      $('.add-contact-btn, #create-contact-btn').on('click', () => this.openContactModal());
+      // Add contact button
+      $('#create-contact-btn').on('click', () => this.openContactModal());
 
       // Contact form
       $('#contact-form').on('submit', (e) => {
@@ -394,6 +429,34 @@
         if (e.target.id === 'contact-modal') this.closeContactModal();
       });
 
+      // Help modal
+      $('#help-modal .close-btn').on('click', () => this.closeHelpModal());
+      $('#close-help-btn').on('click', () => this.closeHelpModal());
+      $('#help-modal').on('click', (e) => {
+        if (e.target.id === 'help-modal') this.closeHelpModal();
+      });
+
+      // Settings modal
+      $('#settings-modal .close-btn').on('click', () => this.closeSettingsModal());
+      $('#close-settings-btn').on('click', () => this.closeSettingsModal());
+      $('#clear-all-btn').on('click', () => this.clearAllData());
+      $('#settings-modal').on('click', (e) => {
+        if (e.target.id === 'settings-modal') this.closeSettingsModal();
+      });
+
+      // Feedback modal
+      $('#feedback-modal .close-btn').on('click', () => this.closeFeedbackModal());
+      $('#feedback-form').on('submit', (e) => {
+        e.preventDefault();
+        this.submitFeedback();
+      });
+      $('#feedback-modal').on('click', (e) => {
+        if (e.target.id === 'feedback-modal') this.closeFeedbackModal();
+      });
+
+      // Voice test button
+      $('.test-voice-btn').on('click', () => this.testMicrophone());
+
       // Incoming call modal
       $('#incoming-call-modal .action-accept').on('click', () => this.acceptCall());
       $('#incoming-call-modal .action-reject').on('click', () => this.rejectCall());
@@ -403,6 +466,127 @@
       $('#call-screen .mute-btn').on('click', () => CallManager.toggleMute());
       $('#call-screen .speaker-btn').on('click', () => CallManager.toggleSpeaker());
       $('#call-screen .end-btn').on('click', () => this.endCall());
+    },
+
+    handleMenuClick(menu) {
+      switch (menu) {
+        case 'calls-history':
+          this.updateContentByTab('all');
+          break;
+        case 'contacts':
+          this.updateContentByTab('contacts');
+          break;
+        case 'settings':
+          this.openSettingsModal();
+          break;
+        case 'help':
+          this.openHelpModal();
+          break;
+        case 'feedback':
+          this.openFeedbackModal();
+          break;
+      }
+    },
+
+    openSidebar() {
+      $('#sidebar-menu').addClass('visible').removeClass('hidden');
+      $('#sidebar-overlay').addClass('visible').removeClass('hidden');
+    },
+
+    closeSidebar() {
+      $('#sidebar-menu').removeClass('visible').addClass('hidden');
+      $('#sidebar-overlay').removeClass('visible').addClass('hidden');
+    },
+
+    openVoiceDemo() {
+      $('#voice-demo-modal').removeClass('hidden');
+    },
+
+    closeVoiceDemo() {
+      $('#voice-demo-modal').addClass('hidden');
+    },
+
+    openHelpModal() {
+      $('#help-modal').removeClass('hidden');
+    },
+
+    closeHelpModal() {
+      $('#help-modal').addClass('hidden');
+    },
+
+    openSettingsModal() {
+      const contacts = Storage.getContacts();
+      const logs = Storage.getCallLogs();
+      $('#contact-count').text(contacts.length);
+      $('#call-count').text(logs.length);
+      $('#settings-modal').removeClass('hidden');
+    },
+
+    closeSettingsModal() {
+      $('#settings-modal').addClass('hidden');
+    },
+
+    openFeedbackModal() {
+      $('#feedback-modal').removeClass('hidden');
+    },
+
+    closeFeedbackModal() {
+      $('#feedback-modal').addClass('hidden');
+    },
+
+    submitFeedback() {
+      const type = $('#feedback-type').val();
+      const message = $('#feedback-message').val();
+      if (type && message) {
+        alert('Thank you for your feedback! 💬');
+        $('#feedback-form')[0].reset();
+        this.closeFeedbackModal();
+      }
+    },
+
+    clearAllData() {
+      if (confirm('Are you sure you want to delete all contacts and call history? This cannot be undone.')) {
+        localStorage.clear();
+        alert('All data has been cleared.');
+        this.closeSettingsModal();
+        this.renderInitialUI();
+      }
+    },
+
+    testMicrophone() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Speech Recognition not supported in your browser. Try Chrome, Edge, or Safari.');
+        return;
+      }
+      alert('Microphone test: Say something! Check your browser console for results.');
+      const recognition = new SpeechRecognition();
+      recognition.onstart = () => console.log('Listening...');
+      recognition.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        console.log('You said:', transcript);
+        alert(`You said: "${transcript}"`);
+      };
+      recognition.start();
+    }
+
+      // Contact form
+      $('#contact-form').on('submit', (e) => {
+        e.preventDefault();
+        const name = $('#contact-name').val().trim();
+        const phone = $('#contact-phone').val().trim();
+        if (name && phone) {
+          Storage.addContact(name, phone);
+          this.closeContactModal();
+          UI.renderContacts();
+        }
+      });
+
+      // Contact modal close
+      $('#contact-modal .close-btn').on('click', () => this.closeContactModal());
+      $('#contact-modal').on('click', (e) => {
+        if (e.target.id === 'contact-modal') this.closeContactModal();
+      });
     },
 
     renderInitialUI() {

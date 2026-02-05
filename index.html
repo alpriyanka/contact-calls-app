@@ -40,8 +40,41 @@
       <div class="search-bar">
         <button type="button" class="icon-btn menu-btn" aria-label="Menu">☰</button>
         <input type="search" placeholder="Search contacts" class="search-input" aria-label="Search contacts">
-        <button type="button" class="icon-btn add-contact-btn" aria-label="Add contact">➕</button>
+        <button type="button" class="icon-btn voice-demo-btn" aria-label="Voice demo">🎤</button>
       </div>
+
+      <!-- Sidebar menu (hidden by default) -->
+      <div id="sidebar-menu" class="sidebar-menu hidden">
+        <div class="sidebar-header">
+          <h2>Menu</h2>
+          <button type="button" class="close-sidebar-btn" aria-label="Close menu">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+          <button type="button" class="sidebar-item" data-menu="calls-history">
+            <span class="menu-icon">📞</span>
+            <span>Call History</span>
+          </button>
+          <button type="button" class="sidebar-item" data-menu="contacts">
+            <span class="menu-icon">👥</span>
+            <span>Contacts</span>
+          </button>
+          <button type="button" class="sidebar-item" data-menu="settings">
+            <span class="menu-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
+          <button type="button" class="sidebar-item" data-menu="help">
+            <span class="menu-icon">❓</span>
+            <span>Help & How to Use</span>
+          </button>
+          <button type="button" class="sidebar-item" data-menu="feedback">
+            <span class="menu-icon">💬</span>
+            <span>Feedback</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar overlay -->
+      <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
 
       <!-- Tabs -->
       <nav class="tabs">
@@ -97,6 +130,153 @@
               <input type="tel" id="contact-phone" placeholder="Enter phone number" required>
             </div>
             <button type="submit" class="btn-primary">Create Contact</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Voice Demo Modal -->
+      <div id="voice-demo-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>🎤 Voice Control Guide</h2>
+            <button type="button" class="close-btn" aria-label="Close">✕</button>
+          </div>
+          <div class="help-content">
+            <h3>How to Use Voice Commands</h3>
+            <p>Make sure your browser has microphone permission enabled.</p>
+            
+            <h4>📞 During an Active Call</h4>
+            <ul>
+              <li><strong>Say "mute"</strong> → Toggle microphone on/off</li>
+              <li><strong>Say "speaker"</strong> → Toggle speaker phone</li>
+              <li><strong>Say "end"</strong> or <strong>"hang up"</strong> → End the call</li>
+              <li><strong>Say "volume up"</strong> → Increase volume</li>
+              <li><strong>Say "volume down"</strong> → Decrease volume</li>
+            </ul>
+
+            <h4>📱 For Incoming Calls</h4>
+            <ul>
+              <li><strong>Say "answer"</strong> or <strong>"accept"</strong> → Accept the call</li>
+              <li><strong>Say "reject"</strong> or <strong>"decline"</strong> → Reject the call</li>
+            </ul>
+
+            <h4>✅ Tips for Best Results</h4>
+            <ul>
+              <li>Speak clearly and naturally</li>
+              <li>Use one command at a time</li>
+              <li>Commands work during calls</li>
+              <li>Allow microphone access when browser asks</li>
+            </ul>
+
+            <button type="button" class="btn-primary test-voice-btn">🎤 Test Microphone</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help & How to Use Modal -->
+      <div id="help-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>❓ Help & How to Use</h2>
+            <button type="button" class="close-btn" aria-label="Close">✕</button>
+          </div>
+          <div class="help-content">
+            <h3>Getting Started</h3>
+
+            <h4>1️⃣ Create a Contact</h4>
+            <p>Tap the <strong>➕</strong> button in the top right to create a new contact. Enter the name and phone number.</p>
+
+            <h4>2️⃣ Make a Call</h4>
+            <p>Go to the <strong>Contacts</strong> tab and tap on any contact to start a call. The call screen will show.</p>
+
+            <h4>3️⃣ Control Your Call</h4>
+            <p>Use the buttons or voice commands to control your call. The timer shows how long you've been on the call.</p>
+
+            <h4>4️⃣ View Call History</h4>
+            <p>Go to the <strong>All</strong> tab to see all your past calls with timestamps and durations.</p>
+
+            <h4>5️⃣ Delete a Contact</h4>
+            <p>Swipe left on a contact in the Contacts tab, or tap the delete button if available.</p>
+
+            <h3>Features</h3>
+            <ul>
+              <li>📞 <strong>Call History</strong> - All calls logged automatically</li>
+              <li>🎤 <strong>Voice Control</strong> - Hands-free call management</li>
+              <li>👥 <strong>Contact Management</strong> - Create, view, and delete contacts</li>
+              <li>🔍 <strong>Search</strong> - Find contacts quickly</li>
+              <li>💾 <strong>Local Storage</strong> - Data saved on your device</li>
+            </ul>
+
+            <h3>Data Storage</h3>
+            <p>All your contacts and call history are stored on your device using browser storage. Your data is private and never sent to any server.</p>
+
+            <button type="button" class="btn-primary" id="close-help-btn">Got It!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Modal -->
+      <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>⚙️ Settings</h2>
+            <button type="button" class="close-btn" aria-label="Close">✕</button>
+          </div>
+          <div class="help-content">
+            <h3>App Settings</h3>
+
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="voice-enabled" checked>
+                <span>Enable Voice Commands</span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="notifications-enabled" checked>
+                <span>Enable Notifications</span>
+              </label>
+            </div>
+
+            <h3>Data Management</h3>
+            <p>You have <strong id="contact-count">0</strong> contacts and <strong id="call-count">0</strong> call logs.</p>
+
+            <button type="button" class="btn-danger" id="clear-all-btn">🗑️ Clear All Data</button>
+
+            <h3>About</h3>
+            <p>Contact Calls App v2.0</p>
+            <p>A modern contact and call history application with voice control.</p>
+
+            <button type="button" class="btn-primary" id="close-settings-btn">Done</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Modal -->
+      <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>💬 Send Feedback</h2>
+            <button type="button" class="close-btn" aria-label="Close">✕</button>
+          </div>
+          <form id="feedback-form" class="contact-form">
+            <div class="form-group">
+              <label>Feedback Type</label>
+              <select id="feedback-type" required>
+                <option value="">-- Select --</option>
+                <option value="bug">Bug Report</option>
+                <option value="feature">Feature Request</option>
+                <option value="improvement">Improvement</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message *</label>
+              <textarea id="feedback-message" placeholder="Tell us what you think..." required rows="5"></textarea>
+            </div>
+            <p style="font-size: 12px; color: #888;">Note: Feedback is saved locally and not sent anywhere.</p>
+            <button type="submit" class="btn-primary">Submit Feedback</button>
           </form>
         </div>
       </div>
