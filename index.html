@@ -294,6 +294,37 @@
         </div>
       </div>
 
+      <!-- Keypad Screen (hidden by default) -->
+      <div id="keypad-screen" class="keypad-screen hidden">
+        <div class="keypad-container">
+          <div class="keypad-display">
+            <input type="text" id="keypad-input" placeholder="Enter number" readonly>
+            <button type="button" class="keypad-clear-btn" title="Clear">C</button>
+          </div>
+          <div class="keypad-grid">
+            <button type="button" class="keypad-btn" data-digit="1">1</button>
+            <button type="button" class="keypad-btn" data-digit="2">2<span>ABC</span></button>
+            <button type="button" class="keypad-btn" data-digit="3">3<span>DEF</span></button>
+            
+            <button type="button" class="keypad-btn" data-digit="4">4<span>GHI</span></button>
+            <button type="button" class="keypad-btn" data-digit="5">5<span>JKL</span></button>
+            <button type="button" class="keypad-btn" data-digit="6">6<span>MNO</span></button>
+            
+            <button type="button" class="keypad-btn" data-digit="7">7<span>PQRS</span></button>
+            <button type="button" class="keypad-btn" data-digit="8">8<span>TUV</span></button>
+            <button type="button" class="keypad-btn" data-digit="9">9<span>WXYZ</span></button>
+            
+            <button type="button" class="keypad-btn" data-digit="*">*</button>
+            <button type="button" class="keypad-btn" data-digit="0">0<span>+</span></button>
+            <button type="button" class="keypad-btn" data-digit="#">#</button>
+          </div>
+          <div class="keypad-actions">
+            <button type="button" id="keypad-call-btn" class="keypad-call-btn">📞 Call</button>
+            <button type="button" id="keypad-close-btn" class="keypad-close-btn">✕ Close</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Bottom nav -->
       <nav class="bottom-nav">
         <a href="#" class="nav-item active">

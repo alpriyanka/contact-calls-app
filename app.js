@@ -468,6 +468,24 @@
       $('#call-screen .mute-btn').on('click', () => CallManager.toggleMute());
       $('#call-screen .speaker-btn').on('click', () => CallManager.toggleSpeaker());
       $('#call-screen .end-btn').on('click', () => this.endCall());
+
+      // Keypad
+      $('.nav-item').on('click', (e) => {
+        const href = $(e.currentTarget).attr('href');
+        if (href === '#keypad') {
+          e.preventDefault();
+          this.openKeypad();
+        }
+      });
+
+      $('.keypad-btn').on('click', (e) => {
+        const digit = $(e.currentTarget).data('digit');
+        this.addDigitToKeypad(digit);
+      });
+
+      $('#keypad-clear-btn').on('click', () => this.clearKeypad());
+      $('#keypad-call-btn').on('click', () => this.callFromKeypad());
+      $('#keypad-close-btn').on('click', () => this.closeKeypad());
     },
 
     handleMenuClick(menu) {
@@ -643,6 +661,43 @@
 
     volumeDown() {
       CallManager.volumeDown();
+    },
+
+    openKeypad() {
+      $('#keypad-screen').removeClass('hidden');
+      $('.nav-item').removeClass('active');
+      $('[href="#keypad"]').addClass('active');
+      $('#keypad-input').val('');
+    },
+
+    closeKeypad() {
+      $('#keypad-screen').addClass('hidden');
+      $('.nav-item').removeClass('active');
+      $('[href="#"]').first().addClass('active');
+      $('#keypad-input').val('');
+    },
+
+    addDigitToKeypad(digit) {
+      const input = $('#keypad-input');
+      let current = input.val();
+      if (digit === '*' || digit === '#' || (digit >= '0' && digit <= '9')) {
+        input.val(current + digit);
+      }
+    },
+
+    clearKeypad() {
+      $('#keypad-input').val('');
+    },
+
+    callFromKeypad() {
+      const number = $('#keypad-input').val().trim();
+      if (!number) {
+        alert('Please enter a phone number');
+        return;
+      }
+      alert('Calling ' + number + '...');
+      CallManager.startCall({ name: number, id: 'direct_' + Date.now(), phone: number });
+      this.closeKeypad();
     }
   };
 

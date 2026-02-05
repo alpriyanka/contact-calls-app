@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jQuery Test</title>
+</head>
+<body>
+  <button id="test-btn">Click Me</button>
+  <p id="output">jQuery loaded: </p>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    console.log('jQuery version:', jQuery ? jQuery.fn.jquery : 'NOT LOADED');
+    document.getElementById('output').textContent = 'jQuery loaded: ' + (typeof jQuery !== 'undefined' ? jQuery.fn.jquery : 'NO');
+    
+    $(document).ready(function() {
+      console.log('Document ready fired');
+      $('#test-btn').on('click', function() {
+        alert('Button clicked!');
+      });
+    });
+  </script>
+</body>
+</html>
