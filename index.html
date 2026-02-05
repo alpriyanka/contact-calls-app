@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Contacts & Calls</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Device frame & viewport selector (desktop) -->
+  <div id="device-toolbar" class="device-toolbar">
+    <label>Device preview:</label>
+    <select id="device-select">
+      <option value="none">No frame (responsive)</option>
+      <option value="iphone14">iPhone 14</option>
+      <option value="iphone14pro">iPhone 14 Pro</option>
+      <option value="iphoneSE">iPhone SE</option>
+      <option value="pixel7">Pixel 7</option>
+      <option value="samsungS23">Samsung S23</option>
+      <option value="oppo">Oppo / OnePlus</option>
+      <option value="small">Small (320px)</option>
+      <option value="medium">Medium (375px)</option>
+      <option value="large">Large (414px)</option>
+    </select>
+    <button id="fullscreen-btn" type="button">Fullscreen frame</button>
+  </div>
+
+  <div id="device-frame" class="device-frame" data-device="none">
+    <div class="device-screen">
+      <!-- Status bar -->
+      <header class="status-bar">
+        <span class="status-battery">92%</span>
+      </header>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <button type="button" class="icon-btn menu-btn" aria-label="Menu">☰</button>
+        <input type="search" placeholder="Search contacts" class="search-input" aria-label="Search contacts">
+        <button type="button" class="icon-btn add-contact-btn" aria-label="Add contact">➕</button>
+      </div>
+
+      <!-- Tabs -->
+      <nav class="tabs">
+        <button type="button" class="tab active" data-tab="all">All</button>
+        <button type="button" class="tab" data-tab="missed">Missed</button>
+        <button type="button" class="tab" data-tab="contacts">Contacts</button>
+      </nav>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon">📞</div>
+          <h2>No contacts yet</h2>
+          <p>Create your first contact to get started</p>
+          <button type="button" class="btn-primary" id="create-contact-btn">+ Add Contact</button>
+        </div>
+
+        <!-- Call logs container -->
+        <ul class="call-list" id="call-list"></ul>
+      </main>
+
+      <!-- Call screen (hidden by default) -->
+      <div id="call-screen" class="call-screen hidden">
+        <div class="call-screen-content">
+          <button type="button" class="close-call-btn" aria-label="Close">✕</button>
+          <div class="call-avatar-large"><span id="call-avatar-text">👤</span></div>
+          <h1 id="call-name-display">Loading...</h1>
+          <div id="call-duration" class="call-duration">00:00</div>
+          <div class="call-actions">
+            <button type="button" class="call-action-btn mute-btn" title="Mute (say 'mute')" aria-label="Mute">🔊</button>
+            <button type="button" class="call-action-btn speaker-btn" title="Speaker (say 'speaker')" aria-label="Speaker">📢</button>
+            <button type="button" class="call-action-btn end-btn" title="End (say 'end')" aria-label="End call">📵</button>
+          </div>
+          <div class="voice-hint">Say "mute", "speaker", "end", "volume up", or "volume down"</div>
+        </div>
+      </div>
+
+      <!-- Contact modal (hidden by default) -->
+      <div id="contact-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>New Contact</h2>
+            <button type="button" class="close-btn" aria-label="Close">✕</button>
+          </div>
+          <form id="contact-form" class="contact-form">
+            <div class="form-group">
+              <label>Name *</label>
+              <input type="text" id="contact-name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+              <label>Phone *</label>
+              <input type="tel" id="contact-phone" placeholder="Enter phone number" required>
+            </div>
+            <button type="submit" class="btn-primary">Create Contact</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Incoming call modal (hidden by default) -->
+      <div id="incoming-call-modal" class="modal incoming-call hidden">
+        <div class="incoming-call-content">
+          <div class="incoming-avatar"><span id="incoming-avatar-text">👤</span></div>
+          <h2 id="incoming-name">Incoming Call</h2>
+          <div class="incoming-actions">
+            <button type="button" class="action-reject" title="Reject (say 'reject')">📵</button>
+            <button type="button" class="action-accept" title="Answer (say 'answer')">💚</button>
+          </div>
+          <div class="voice-hint">Say "answer" or "reject"</div>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="#keypad" class="nav-item">
+          <span class="nav-icon">⌨️</span>
+          <span class="nav-label">Keypad</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+</body>
+</html>
