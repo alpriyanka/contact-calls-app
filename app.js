@@ -1,5 +1,7 @@
 (function ($) {
   'use strict';
+  
+  console.log('App.js loaded, jQuery available:', typeof $ !== 'undefined');
 
   // ===========================
   // Storage Management
