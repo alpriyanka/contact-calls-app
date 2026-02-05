@@ -570,25 +570,6 @@
         alert(`You said: "${transcript}"`);
       };
       recognition.start();
-    }
-
-      // Contact form
-      $('#contact-form').on('submit', (e) => {
-        e.preventDefault();
-        const name = $('#contact-name').val().trim();
-        const phone = $('#contact-phone').val().trim();
-        if (name && phone) {
-          Storage.addContact(name, phone);
-          this.closeContactModal();
-          UI.renderContacts();
-        }
-      });
-
-      // Contact modal close
-      $('#contact-modal .close-btn').on('click', () => this.closeContactModal());
-      $('#contact-modal').on('click', (e) => {
-        if (e.target.id === 'contact-modal') this.closeContactModal();
-      });
     },
 
     renderInitialUI() {
